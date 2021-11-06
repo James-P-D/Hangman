@@ -25,22 +25,57 @@ CHOOSE_WORD     OUTPUT = "Enter a number between 1 and " TOTAL_WORDS
                 N = 1
 MAKE_ATTEMPT    WORD_ATTEMPT = WORD_ATTEMPT "_"
                 N = N + 1
-                LE(N, SIZE(WORDS<WORD_INDEX>))              : S(MAKE_ATTEMPT)
+                LE(N, SIZE(CHOSEN_WORD))                                : S(MAKE_ATTEMPT)
+
+                TOTAL_BAD_GUESSES = 0
                 
-                OUTPUT = WORD_ATTEMPT
+MAKE_GUESS      OUTPUT = WORD_ATTEMPT
+GUESS_LETTER    OUTPUT = "Guess an uppercase letter"               
+                GUESSED_LETTER = TRIM(INPUT)
                 
-                OUTPUT = CHOSEN_WORD
-                OUTPUT = DATATYPE(CHOSEN_WORD)
-                OUTPUT = SIZE(CHOSEN_WORD)
-                FOO = "foo"
-                BAR = "bar"
-                MOO = FOO BAR
-                OUTPUT = MOO
-                * Think we need to use POS to check for characters
+                NE(SIZE(GUESSED_LETTER), 1)                             : S(GUESS_LETTER)
+                GUESSED_LETTER ("A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z") : F(GUESS_LETTER)
+
+                N = 0
+                NEW_WORD_ATTEMPT = ""
+                FOUND_CHARS = 0
+CHECK_GUESS     CHOSEN_WORD POS(N) LEN(1) . CHOSEN_WORD_CHAR
                 
-MAKE_GUESS      OUTPUT = "Make a guess!"                    : (FINISHED)
+                IDENT(CHOSEN_WORD_CHAR, GUESSED_LETTER)                 : S(CORRECT_GUESS) 
+                
+                WORD_ATTEMPT POS(N) LEN(1) . CURRENT_WORD_CHAR
+                NEW_WORD_ATTEMPT = NEW_WORD_ATTEMPT CURRENT_WORD_CHAR   : (INC_N)
+                
+
+CORRECT_GUESS   NEW_WORD_ATTEMPT = NEW_WORD_ATTEMPT CHOSEN_WORD_CHAR
+                FOUND_CHARS = FOUND_CHARS + 1
+                
+INC_N           N = N + 1
+                LT(N, SIZE(WORDS<WORD_INDEX>))                          : S(CHECK_GUESS)
+
+                WORD_ATTEMPT = NEW_WORD_ATTEMPT
+                
+                IDENT(WORD_ATTEMPT, CHOSEN_WORD)                        : S(WIN)
+                EQ(FOUND_CHARS, 0)                                      : F(MAKE_GUESS)
+                
+                OUTPUT = "Uh-oh! "
+                
+                TOTAL_BAD_GUESSES = TOTAL_BAD_GUESSES + 1
+                EQ(TOTAL_BAD_GUESSES, 1)                                : S(HM_01)
+                EQ(TOTAL_BAD_GUESSES, 2)                                : S(HM_02)
+                EQ(TOTAL_BAD_GUESSES, 3)                                : S(HM_03)
+                EQ(TOTAL_BAD_GUESSES, 4)                                : S(HM_04)
+                EQ(TOTAL_BAD_GUESSES, 5)                                : S(HM_05)
+                EQ(TOTAL_BAD_GUESSES, 6)                                : S(HM_06)
+                EQ(TOTAL_BAD_GUESSES, 7)                                : S(HM_07)
+                EQ(TOTAL_BAD_GUESSES, 8)                                : S(HM_08)
+                EQ(TOTAL_BAD_GUESSES, 9)                                : S(HM_09)
+                EQ(TOTAL_BAD_GUESSES, 10)                               : S(HM_10) F(HM_11)
+                
+WIN             OUTPUT = "Congratulations! You correctly guessed " CHOSEN_WORD  : S(PLAY_AGAIN)
 
 HM_01           OUTPUT = "            "
+                OUTPUT = "            "
                 OUTPUT = "            "   
                 OUTPUT = "            "
                 OUTPUT = "            "
@@ -48,9 +83,10 @@ HM_01           OUTPUT = "            "
                 OUTPUT = "            "
                 OUTPUT = "            "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_02           OUTPUT = "+           "
+HM_02           OUTPUT = "            "
+                OUTPUT = "+           "
                 OUTPUT = "|           "   
                 OUTPUT = "|           "
                 OUTPUT = "|           "
@@ -58,9 +94,10 @@ HM_02           OUTPUT = "+           "
                 OUTPUT = "|           "
                 OUTPUT = "|           "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_03           OUTPUT = "+           "
+HM_03           OUTPUT = "            "
+                OUTPUT = "+           "
                 OUTPUT = "|           "   
                 OUTPUT = "|           "
                 OUTPUT = "|           "
@@ -68,9 +105,10 @@ HM_03           OUTPUT = "+           "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_04           OUTPUT = "+           "
+HM_04           OUTPUT = "            "
+                OUTPUT = "+           "
                 OUTPUT = "|/          "   
                 OUTPUT = "|           "
                 OUTPUT = "|           "
@@ -78,9 +116,10 @@ HM_04           OUTPUT = "+           "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_05           OUTPUT = "+------+    "
+HM_05           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|           "
                 OUTPUT = "|           "
@@ -88,9 +127,10 @@ HM_05           OUTPUT = "+------+    "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_06           OUTPUT = "+------+    "
+HM_06           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|      @    "
                 OUTPUT = "|           "
@@ -98,9 +138,10 @@ HM_06           OUTPUT = "+------+    "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_07           OUTPUT = "+------+    "
+HM_07           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|      @    "
                 OUTPUT = "|      |    "
@@ -108,9 +149,10 @@ HM_07           OUTPUT = "+------+    "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_08           OUTPUT = "+------+    "
+HM_08           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|      @    "
                 OUTPUT = "|     \|    "
@@ -118,9 +160,10 @@ HM_08           OUTPUT = "+------+    "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_09           OUTPUT = "+------+    "
+HM_09           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|      @    "
                 OUTPUT = "|     \|/   "
@@ -128,9 +171,10 @@ HM_09           OUTPUT = "+------+    "
                 OUTPUT = "|           "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_10           OUTPUT = "+------+    "
+HM_10           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|      @    "
                 OUTPUT = "|     \|/   "
@@ -138,9 +182,10 @@ HM_10           OUTPUT = "+------+    "
                 OUTPUT = "|     /     "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
-                OUTPUT = ""                                 : (MAKE_GUESS)
+                OUTPUT = ""                                             : (MAKE_GUESS)
 
-HM_11           OUTPUT = "+------+    "
+HM_11           OUTPUT = "            "
+                OUTPUT = "+------+    "
                 OUTPUT = "|/     |    "   
                 OUTPUT = "|      @    "
                 OUTPUT = "|     \|/   "
@@ -149,14 +194,12 @@ HM_11           OUTPUT = "+------+    "
                 OUTPUT = "|\          "
                 OUTPUT = "+-----------"
                 OUTPUT = ""
-                OUTPUT = "YOU ARE DEAD!"                    : (PLAY_AGAIN)
+                OUTPUT = "YOU ARE DEAD!"                                : (PLAY_AGAIN)
 
+PLAY_AGAIN      OUTPUT = "Play again? [Y/N]"
+                Y_OR_N = INPUT
+                Y_OR_N ("y" | "n" | "Y" | "N")                          : F(PLAY_AGAIN)
+                Y_OR_N ("y" | "Y")                                      : S(CHOOSE_WORD) F(FINISHED)
 
-PLAY_AGAIN  OUTPUT "thanks!"
-            OUTPUT = "Play again? [Y/N]"
-            Y_OR_N = INPUT
-            Y_OR_N ("y" | "n" | "Y" | "N")              : F(PLAY_AGAIN)
-            Y_OR_N ("y" | "Y")                          : S(CHOOSE_WORD) F(FINISHED)
-
-FINISHED    OUTPUT = "Bye!"
+FINISHED        OUTPUT = "Bye!"
 END            
