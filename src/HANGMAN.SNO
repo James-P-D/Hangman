@@ -1,0 +1,162 @@
+                INPUT('INPUT', 1, , 'CON')
+                TOTAL_WORDS = '10'
+                WORDS = ARRAY(TOTAL_WORDS)
+                WORDS<01> = "APPLE"
+                WORDS<02> = "BANANA"
+                WORDS<03> = "CARROT"
+                WORDS<04> = "DRAGONFRUIT"
+                WORDS<05> = "ELDERBERRY"
+                WORDS<06> = "FIG"
+                WORDS<07> = "GRAPE"
+                WORDS<08> = "HUCKLEBERRY"
+                WORDS<09> = "JUNIPER"
+                WORDS<10> = "KIWI" 
+
+INTRO           OUTPUT = "Welcome to Hangman!"
+
+CHOOSE_WORD     OUTPUT = "Enter a number between 1 and " TOTAL_WORDS
+                WORD_INDEX = TRIM(INPUT)
+                INTEGER(WORD_INDEX)                         : F(CHOOSE_WORD)
+                GE(WORD_INDEX, 1)                           : F(CHOOSE_WORD)
+                LE(WORD_INDEX, TOTAL_WORDS)                 : F(CHOOSE_WORD)
+                CHOSEN_WORD = WORDS<WORD_INDEX>
+                
+                WORD_ATTEMPT = ""
+                N = 1
+MAKE_ATTEMPT    WORD_ATTEMPT = WORD_ATTEMPT "_"
+                N = N + 1
+                LE(N, SIZE(WORDS<WORD_INDEX>))              : S(MAKE_ATTEMPT)
+                
+                OUTPUT = WORD_ATTEMPT
+                
+                OUTPUT = CHOSEN_WORD
+                OUTPUT = DATATYPE(CHOSEN_WORD)
+                OUTPUT = SIZE(CHOSEN_WORD)
+                FOO = "foo"
+                BAR = "bar"
+                MOO = FOO BAR
+                OUTPUT = MOO
+                * Think we need to use POS to check for characters
+                
+MAKE_GUESS      OUTPUT = "Make a guess!"                    : (FINISHED)
+
+HM_01           OUTPUT = "            "
+                OUTPUT = "            "   
+                OUTPUT = "            "
+                OUTPUT = "            "
+                OUTPUT = "            "
+                OUTPUT = "            "
+                OUTPUT = "            "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_02           OUTPUT = "+           "
+                OUTPUT = "|           "   
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_03           OUTPUT = "+           "
+                OUTPUT = "|           "   
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_04           OUTPUT = "+           "
+                OUTPUT = "|/          "   
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_05           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_06           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|      @    "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_07           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|      @    "
+                OUTPUT = "|      |    "
+                OUTPUT = "|      |    "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_08           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|      @    "
+                OUTPUT = "|     \|    "
+                OUTPUT = "|      |    "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_09           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|      @    "
+                OUTPUT = "|     \|/   "
+                OUTPUT = "|      |    "
+                OUTPUT = "|           "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_10           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|      @    "
+                OUTPUT = "|     \|/   "
+                OUTPUT = "|      |    "
+                OUTPUT = "|     /     "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""                                 : (MAKE_GUESS)
+
+HM_11           OUTPUT = "+------+    "
+                OUTPUT = "|/     |    "   
+                OUTPUT = "|      @    "
+                OUTPUT = "|     \|/   "
+                OUTPUT = "|      |    "
+                OUTPUT = "|     / \   "
+                OUTPUT = "|\          "
+                OUTPUT = "+-----------"
+                OUTPUT = ""
+                OUTPUT = "YOU ARE DEAD!"                    : (PLAY_AGAIN)
+
+
+PLAY_AGAIN  OUTPUT "thanks!"
+            OUTPUT = "Play again? [Y/N]"
+            Y_OR_N = INPUT
+            Y_OR_N ("y" | "n" | "Y" | "N")              : F(PLAY_AGAIN)
+            Y_OR_N ("y" | "Y")                          : S(CHOOSE_WORD) F(FINISHED)
+
+FINISHED    OUTPUT = "Bye!"
+END            
